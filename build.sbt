@@ -1,29 +1,29 @@
-name := "gatling-grpc"
-
-organization := "com.spr.intuition"
+name := "tf-serving-gatling"
 
 scalaVersion := "2.12.6"
 
-lazy val root = (project in file(".")).enablePlugins(GatlingPlugin)
+lazy val root = (project in file(".")).settings(inConfig(Gatling)(Defaults.testSettings): _*)
 
-lazy val gatlingVersion = "2.2.2"
-
-libraryDependencies ++= Seq(
-  "io.gatling.highcharts" % "gatling-charts-highcharts" % gatlingVersion % "test" withJavadoc() withSources(),
-  "io.gatling" % "gatling-test-framework" % gatlingVersion % "test" withJavadoc() withSources(),
-  "io.gatling" % "gatling-core" % gatlingVersion,
-  "io.grpc" % "grpc-netty" % "1.0.3",
-  "io.netty" % "netty-tcnative-boringssl-static" % "1.1.33.Fork26",
-  "io.grpc" % "grpc-testing" % "1.0.2"
-)
-
-libraryDependencies += Seq(
-  "com.thesamet.scalapb" %% "scalapb-runtime" % scalapb.compiler.Version.scalapbVersion % "protobuf"
-)
+lazy val gatlingVersion = "2.3.0"
 
 
 PB.targets in Compile := Seq(
   scalapb.gen() -> (sourceManaged in Compile).value
+)
+
+// (optional) If you need scalapb/scalapb.proto or anything from google/protobuf/*.proto
+libraryDependencies ++= Seq(
+  "com.thesamet.scalapb" %% "scalapb-runtime" % scalapb.compiler.Version.scalapbVersion % "protobuf"
+)
+
+
+libraryDependencies ++= Seq(
+  "io.gatling.highcharts" % "gatling-charts-highcharts" % gatlingVersion % "test",
+  "io.gatling" % "gatling-test-framework" % gatlingVersion % "test",
+  "io.gatling" % "gatling-core" % gatlingVersion,
+  "io.grpc" % "grpc-netty" % "1.0.3",
+  "io.netty" % "netty-tcnative-boringssl-static" % "1.1.33.Fork26",
+  "io.grpc" % "grpc-testing" % "1.0.2"
 )
 
 javaOptions in Gatling := overrideDefaultJavaOptions("-Xms1g", "-Xmx2g")
