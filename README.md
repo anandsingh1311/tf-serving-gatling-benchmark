@@ -6,3 +6,8 @@
 
 ### References
 https://scalapb.github.io/sbt-settings.html
+
+
+#####`Adding the grpc protocol`
+http://leaks.wanari.com/2017/02/10/write-custom-protocol-gatling/
+
