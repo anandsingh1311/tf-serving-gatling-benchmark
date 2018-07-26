@@ -5,6 +5,7 @@ import com.trueaccord.scalapb.GeneratedMessage
 import io.gatling.commons.validation.{Failure, Validation}
 import io.gatling.core.check.CheckResult
 import io.gatling.core.session.Session
+import tf.benchmark.grpc.GrpcCheck
 
 import scala.collection.mutable
 
@@ -14,6 +15,7 @@ import scala.collection.mutable
   * @param func
   */
 case class GrpcCustomCheck(func: GeneratedMessage => Boolean) extends GrpcCheck{
+
   override def check(response: GeneratedMessage, session: Session)(implicit cache: mutable.Map[Any, Any]): Validation[CheckResult] = {
     func(response) match {
       case true => CheckResult.NoopCheckResultSuccess

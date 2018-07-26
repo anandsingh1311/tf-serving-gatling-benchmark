@@ -11,10 +11,7 @@ lazy val gatlingVersion = "2.3.0"
 // (optional) If you need scalapb/scalapb.proto or anything from google/protobuf/*.proto
 libraryDependencies ++= Seq(
   "com.thesamet.scalapb" %% "scalapb-runtime" % scalapb.compiler.Version.scalapbVersion % "protobuf",
-  "com.thesamet.scalapb" %% "scalapb-runtime-grpc" % scalapb.compiler.Version.scalapbVersion
-)
-
-libraryDependencies ++= Seq(
+  "com.thesamet.scalapb" %% "scalapb-runtime-grpc" % scalapb.compiler.Version.scalapbVersion,
   "io.gatling.highcharts" % "gatling-charts-highcharts" % gatlingVersion % "test",
   "io.gatling" % "gatling-test-framework" % gatlingVersion % "test",
   "io.gatling" % "gatling-core" % gatlingVersion,

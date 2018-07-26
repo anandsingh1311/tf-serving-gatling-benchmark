@@ -6,6 +6,7 @@ import tensorflow.serving.prediction_service.PredictionServiceGrpc.PredictionSer
 import tensorflow.serving.predict._
 import com.thesamet.scalapb.GeneratedMessage
 import tensorflow.serving.model.ModelSpec
+import io.grpc.ManagedChannelBuilder
 
 import scala.concurrent.Future
 

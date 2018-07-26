@@ -23,3 +23,9 @@ object GrpcProtocol {
 case class GrpcProtocol() extends Protocol {
   type Components = GrpcComponents
 }
+
+case class GrpcProtocolBuilder() {
+
+  def build = GrpcProtocol
+
+}
