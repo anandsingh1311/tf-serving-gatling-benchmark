@@ -1,3 +1,3 @@
-addSbtPlugin("com.thesamet" % "sbt-protoc" % "0.99.18")
+logLevel := Level.Warn
 
-libraryDependencies += "com.thesamet.scalapb" %% "compilerplugin" % "0.7.4"
+libraryDependencies += "com.trueaccord.scalapb" %% "compilerplugin" % "0.5.47"
