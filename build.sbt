@@ -6,7 +6,7 @@ scalaVersion := "2.12.6"
 
 lazy val root = (project in file(".")).enablePlugins(GatlingPlugin)
 
-lazy val gatlingVersion = "2.2.2"
+lazy val gatlingVersion = "2.3.0"
 
 libraryDependencies ++= Seq(
   "io.gatling.highcharts" % "gatling-charts-highcharts" % gatlingVersion % "test" withJavadoc() withSources(),
