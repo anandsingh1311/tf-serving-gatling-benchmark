@@ -1,12 +1,11 @@
 package tf.benchmark
 
-import tf.benchmark.actions.impl._
-import tf.benchmark.actions.{GrpcAction, GrpcExecutableAction}
-import tf.benchmark.grpc._
 import io.gatling.core.action.Action
 import io.gatling.core.action.builder.ActionBuilder
 import io.gatling.core.protocol.Protocols
 import io.gatling.core.structure.ScenarioContext
+import tf.benchmark.actions.{GrpcAction, GrpcExecutableAction}
+import tf.benchmark.grpc._
 
 /**
   * Responsible to create specific action. Note in our case it uses functionName as criteria to decide if action will
@@ -17,17 +16,11 @@ import io.gatling.core.structure.ScenarioContext
   */
 case class GrpcActionBuilder(action: GrpcExecutableAction, checks: List[GrpcCheck]) extends ActionBuilder {
 
-  def grpcProtocol(protocols: Protocols) = {
+  def grpcProtocol(protocols: Protocols): GrpcProtocol = {
     protocols.protocol[GrpcProtocol].getOrElse(throw new UnsupportedOperationException("gRPC protocol wasn't registered"))
   }
 
   override def build(ctx: ScenarioContext, next: Action): Action = {
-    val statsEngine = coreComponents.statsEngine
-    GrpcAction(action, checks, new GrpcProtocol, ctx.system, statsEngine, next)
-    //    functionName match {
-    //      case "async" => GrpcAction(GrpcAsyncCallAction(functionName, host, port, requestMessage = payload.get), checks, new GrpcProtocol, ctx.system, statsEngine, next)
-    //      case "sync"  => GrpcAction(GrpcSyncCallAction(functionName, host, port, requestMessage = payload.get), checks, new GrpcProtocol, ctx.system, statsEngine, next)
-    //      case       _ => throw new UnsupportedOperationException(s"Operation $functionName is not supported")
-    //    }
+    GrpcAction(action, checks, new GrpcProtocol, ctx.system, ctx.coreComponents.statsEngine, next)
   }
 }

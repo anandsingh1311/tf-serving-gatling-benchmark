@@ -8,16 +8,22 @@ lazy val root = (project in file(".")).enablePlugins(GatlingPlugin)
 
 lazy val gatlingVersion = "2.2.2"
 
-// (optional) If you need scalapb/scalapb.proto or anything from google/protobuf/*.proto
 libraryDependencies ++= Seq(
   "io.gatling.highcharts" % "gatling-charts-highcharts" % gatlingVersion % "test" withJavadoc() withSources(),
   "io.gatling" % "gatling-test-framework" % gatlingVersion % "test" withJavadoc() withSources(),
   "io.gatling" % "gatling-core" % gatlingVersion,
-  "io.grpc" % "grpc-netty" % "1.0.3",
-  "com.trueaccord.scalapb" %% "scalapb-runtime" % com.trueaccord.scalapb.compiler.Version.scalapbVersion,
-  "com.trueaccord.scalapb" %% "scalapb-runtime-grpc" % com.trueaccord.scalapb.compiler.Version.scalapbVersion,
+
+  "io.grpc" % "grpc-netty" % scalapb.compiler.Version.grpcJavaVersion,
+  "com.thesamet.scalapb" %% "scalapb-runtime" % scalapb.compiler.Version.scalapbVersion % "protobuf",
+  "com.thesamet.scalapb" %% "scalapb-runtime-grpc" % scalapb.compiler.Version.scalapbVersion,
+  // For ScalaPB 0.7.x:
+  //"com.thesamet.scalapb" %% "scalapb-json4s" % "0.7.0",
   "io.netty" % "netty-tcnative-boringssl-static" % "1.1.33.Fork26",
-  "io.grpc" % "grpc-testing" % "1.0.2"
+  "io.grpc" % "grpc-testing" % scalapb.compiler.Version.grpcJavaVersion
+)
+
+PB.targets in Compile := Seq(
+  scalapb.gen() -> (sourceManaged in Compile).value
 )
 
 javaOptions in Gatling := overrideDefaultJavaOptions("-Xms1g", "-Xmx2g")

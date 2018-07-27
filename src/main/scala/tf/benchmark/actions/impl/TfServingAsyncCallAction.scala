@@ -24,14 +24,14 @@ object TfServingAsyncCallAction {
     * @param version   - model version deployed
     * @return - GrpcAsyncCallAction
     */
-  def apply(host: String, port: Int, modelName: String, version: Int): TfServingAsyncCallAction = new TfServingAsyncCallAction(host, port, modelName, version)
+  def apply(host: String, port: Int, modelName: String, version: Option[Long]): TfServingAsyncCallAction = new TfServingAsyncCallAction(host, port, modelName, version)
 }
 
-class TfServingAsyncCallAction(host: String, port: Int, modelName: String, version: Int) extends GrpcExecutableAsyncAction {
+class TfServingAsyncCallAction(host: String, port: Int, modelName: String, version: Option[Long]) extends GrpcExecutableAsyncAction {
 
   var channel = ManagedChannelBuilder.forAddress(host, port).usePlaintext(true).build
   val asyncCall: PredictionServiceStub = PredictionServiceGrpc.stub(channel)
-  val modelSpec: ModelSpec = ModelSpec(modelName, version)
+  val modelSpec: Option[ModelSpec] = Option(new ModelSpec(modelName, version))
 
   /**
     * Send async call to the server
@@ -39,7 +39,7 @@ class TfServingAsyncCallAction(host: String, port: Int, modelName: String, versi
     * @return Future[GeneratedMessage]
     */
   override def executeAsync: Future[GeneratedMessage] = asyncCall.predict(
-    PredictRequest(modelSpec, inputs = scala.Unit)
+    new PredictRequest(modelSpec, inputs = scala.None)
   )
 
 }

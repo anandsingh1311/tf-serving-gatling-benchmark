@@ -1,5 +1,7 @@
 package tf.benchmark
 
 trait GrpcCheckSupport {
-  def customCheck = GrpcCustomCheck
+
+  def customCheck: GrpcCustomCheck.type = GrpcCustomCheck
+
 }

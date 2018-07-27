@@ -12,9 +12,10 @@ import scala.collection.mutable
 /**
   * Simple match class, checking if response message (GeneratedMessage) satisfy checker function.
   * It is possible to write more complex checkers in case they are needed.
+  *
   * @param func
   */
-case class GrpcCustomCheck(func: GeneratedMessage => Boolean) extends GrpcCheck{
+case class GrpcCustomCheck(func: GeneratedMessage => Boolean) extends GrpcCheck {
 
   override def check(response: GeneratedMessage, session: Session)(implicit cache: mutable.Map[Any, Any]): Validation[CheckResult] = {
     func(response) match {

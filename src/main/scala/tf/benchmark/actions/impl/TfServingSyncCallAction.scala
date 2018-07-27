@@ -1,7 +1,6 @@
 package tf.benchmark.actions.impl
 
 
-import com.tamedia.noname.server.grpc.endpoint.log.{LogEndpointGrpc, LogRequest}
 import io.grpc.ManagedChannelBuilder
 import tf.benchmark.actions.GrpcExecutableSyncAction
 

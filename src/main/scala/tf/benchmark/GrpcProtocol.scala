@@ -5,7 +5,13 @@ import io.gatling.core.protocol.{Protocol, ProtocolKey}
 
 object GrpcProtocol {
 
-  val GrpcProtocolKey = new ProtocolKey {
+  val GrpcProtocolKey: ProtocolKey {
+
+    type Components = GrpcComponents
+
+    type Protocol = GrpcProtocol
+
+  } = new ProtocolKey {
 
     override type Protocol = GrpcProtocol
     override type Components = GrpcComponents
@@ -21,11 +27,13 @@ object GrpcProtocol {
 }
 
 case class GrpcProtocol() extends Protocol {
+
   type Components = GrpcComponents
+
 }
 
 case class GrpcProtocolBuilder() {
 
-  def build = GrpcProtocol
+  def build: GrpcProtocol.type = GrpcProtocol
 
 }

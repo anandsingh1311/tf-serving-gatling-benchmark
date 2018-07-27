@@ -9,9 +9,9 @@ object Predef extends GrpcDsl
   */
 trait GrpcDsl extends GrpcCheckSupport {
 
-  val GRPC = GrpcProtocolBuilder
+  val GRPC: GrpcProtocolBuilder.type = GrpcProtocolBuilder
 
-  def grpcCall = GrpcProcessBuilder
+  def grpcCall: GrpcProcessBuilder.type = GrpcProcessBuilder
 
   implicit def grpcProtocolBuilder2grpcProtocol(builder: GrpcProtocolBuilder): GrpcProtocol = builder.build()
 

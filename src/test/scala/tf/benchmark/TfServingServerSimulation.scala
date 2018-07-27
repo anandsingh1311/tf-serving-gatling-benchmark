@@ -1,10 +1,16 @@
 package tf.benchmark
 
-import com.thesamet.gatling.GrpcCustomCheck
+
 import tf.benchmark.actions.impl.{TfServingAsyncCallAction, TfServingSyncCallAction}
-import com.thesamet.scalapb.GeneratedMessage
+
 import io.gatling.core.Predef._
 import tf.benchmark.GrpcCustomCheck
+
+import tf.benchmark.GrpcCustomCheck
+import tf.benchmark.actions.impl.{GrpcAsyncCallAction, GrpcSyncCallAction}
+import com.trueaccord.scalapb.GeneratedMessage
+import io.gatling.core.Predef._
+import scala.concurrent.duration._
 
 import scala.concurrent.duration._
 import scala.io.Source
