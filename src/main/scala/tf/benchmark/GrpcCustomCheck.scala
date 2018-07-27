@@ -1,7 +1,7 @@
 package tf.benchmark
 
 
-import com.trueaccord.scalapb.GeneratedMessage
+import scalapb.GeneratedMessage
 import io.gatling.commons.validation.{Failure, Validation}
 import io.gatling.core.check.CheckResult
 import io.gatling.core.session.Session

@@ -17,7 +17,7 @@ libraryDependencies ++= Seq(
   "com.thesamet.scalapb" %% "scalapb-runtime" % scalapb.compiler.Version.scalapbVersion % "protobuf",
   "com.thesamet.scalapb" %% "scalapb-runtime-grpc" % scalapb.compiler.Version.scalapbVersion,
   // For ScalaPB 0.7.x:
-  //"com.thesamet.scalapb" %% "scalapb-json4s" % "0.7.0",
+  "com.thesamet.scalapb" %% "scalapb-json4s" % "0.7.0",
   "io.netty" % "netty-tcnative-boringssl-static" % "1.1.33.Fork26",
   "io.grpc" % "grpc-testing" % scalapb.compiler.Version.grpcJavaVersion
 )

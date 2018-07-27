@@ -1,7 +1,7 @@
 package tf.benchmark.actions
 
 import akka.actor.Props
-import com.trueaccord.scalapb.GeneratedMessage
+import scalapb.GeneratedMessage
 import io.gatling.commons.stats.{KO, OK}
 import io.gatling.commons.util.TimeHelper
 import io.gatling.commons.validation.Failure
@@ -39,25 +39,23 @@ class GrpcActionActor(action: GrpcExecutableAction,
 
     try {
       action match {
-        case act: GrpcExecutableSyncAction => {
+        case act: GrpcExecutableSyncAction =>
           optionalResult = act.executeSync
           logResult(optionalResult)
-        }
-        case act: GrpcExecutableAsyncAction => {
+
+        case act: GrpcExecutableAsyncAction =>
           val asyncResponse: Future[GeneratedMessage] = act.executeAsync
           asyncResponse.onComplete { response =>
             optionalResult = Option(response.get)
             logResult(optionalResult)
           }
-        }
         case _ => throw new UnsupportedOperationException("Action is not supported")
       }
     }
     catch {
-      case t: Throwable => {
+      case t: Throwable =>
         optionalThrowable = Some(t)
         logResult(None, optionalThrowable)
-      }
     }
 
     /**
@@ -66,7 +64,7 @@ class GrpcActionActor(action: GrpcExecutableAction,
       * @param maybeResult - response from the server that will be checked
       * @param error       - error in case it exists
       */
-    def logResult(maybeResult: Option[GeneratedMessage], error: Option[Throwable] = None) = {
+    def logResult(maybeResult: Option[GeneratedMessage], error: Option[Throwable] = None): Unit = {
       val endTime = TimeHelper.nowMillis
       val timings = ResponseTimings(startTime, endTime)
 
@@ -75,14 +73,12 @@ class GrpcActionActor(action: GrpcExecutableAction,
         if (Option(result).nonEmpty) {
           val (newSession, error) = Check.check(result, session, checks)
           error match {
-            case None => {
+            case None =>
               statsEngine.logResponse(session, action.name, timings, OK, None, None)
               next ! newSession(session)
-            }
-            case Some(Failure(errorMessage)) => {
+            case Some(Failure(errorMessage)) =>
               statsEngine.logResponse(session, action.name, timings, KO, None, Some(errorMessage))
               next ! newSession(session).markAsFailed
-            }
           }
         }
         else {
