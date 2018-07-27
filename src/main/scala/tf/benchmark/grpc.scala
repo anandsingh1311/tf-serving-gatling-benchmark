@@ -1,6 +1,6 @@
 package tf.benchmark
 
-import com.thesamet.scalapb.GeneratedMessage
+import com.trueaccord.scalapb.GeneratedMessage
 
 import io.gatling.commons.validation._
 import io.gatling.core.check.{Check, Extender, Preparer}

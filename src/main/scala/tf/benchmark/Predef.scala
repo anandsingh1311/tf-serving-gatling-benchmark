@@ -1,5 +1,6 @@
 package tf.benchmark
 
+import io.gatling.core.action.builder.ActionBuilder
 
 object Predef extends GrpcDsl
 

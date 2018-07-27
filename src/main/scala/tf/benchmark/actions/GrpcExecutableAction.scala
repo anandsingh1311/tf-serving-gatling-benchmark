@@ -1,6 +1,6 @@
 package tf.benchmark.actions
 
-import com.thesamet.scalapb.GeneratedMessage
+import com.trueaccord.scalapb.GeneratedMessage
 
 import scala.concurrent.Future
 

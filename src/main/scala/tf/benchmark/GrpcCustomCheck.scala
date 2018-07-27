@@ -1,6 +1,6 @@
 package tf.benchmark
 
-import ch.tamedia.gatling.grpc._
+
 import com.trueaccord.scalapb.GeneratedMessage
 import io.gatling.commons.validation.{Failure, Validation}
 import io.gatling.core.check.CheckResult

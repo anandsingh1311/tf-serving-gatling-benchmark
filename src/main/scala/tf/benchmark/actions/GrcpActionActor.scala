@@ -1,8 +1,6 @@
 package tf.benchmark.actions
 
 import akka.actor.Props
-import ch.tamedia.gatling.GrpcProtocol
-import ch.tamedia.gatling.grpc.GrpcCheck
 import com.trueaccord.scalapb.GeneratedMessage
 import io.gatling.commons.stats.{KO, OK}
 import io.gatling.commons.util.TimeHelper
@@ -12,6 +10,8 @@ import io.gatling.core.check.Check
 import io.gatling.core.session.Session
 import io.gatling.core.stats.StatsEngine
 import io.gatling.core.stats.message.ResponseTimings
+import tf.benchmark.GrpcProtocol
+import tf.benchmark.grpc.GrpcCheck
 
 import scala.concurrent.Future
 
@@ -19,9 +19,11 @@ import scala.concurrent.Future
   * Execute tests and write results in stats engine
   */
 object GrpcActionActor {
+
   def props(action: GrpcExecutableAction, checks: List[GrpcCheck], protocol: GrpcProtocol, statsEngine: StatsEngine, next: Action): Props = {
     Props(new GrpcActionActor(action, checks, protocol, statsEngine, next))
   }
+
 }
 
 class GrpcActionActor(action: GrpcExecutableAction,
@@ -33,7 +35,7 @@ class GrpcActionActor(action: GrpcExecutableAction,
   override def execute(session: Session): Unit = {
     val startTime = TimeHelper.nowMillis
     var optionalResult: Option[GeneratedMessage] = None
-    var optionalThrowable : Option[Throwable] = None
+    var optionalThrowable: Option[Throwable] = None
 
     try {
       action match {
@@ -43,7 +45,7 @@ class GrpcActionActor(action: GrpcExecutableAction,
         }
         case act: GrpcExecutableAsyncAction => {
           val asyncResponse: Future[GeneratedMessage] = act.executeAsync
-          asyncResponse.onComplete{response =>
+          asyncResponse.onComplete { response =>
             optionalResult = Option(response.get)
             logResult(optionalResult)
           }
@@ -60,6 +62,7 @@ class GrpcActionActor(action: GrpcExecutableAction,
 
     /**
       * Write results or log errors
+      *
       * @param maybeResult - response from the server that will be checked
       * @param error       - error in case it exists
       */

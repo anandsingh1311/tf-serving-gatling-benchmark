@@ -1,7 +1,7 @@
 package tf.benchmark
 
 import com.thesamet.gatling.GrpcCustomCheck
-import tf.benchmark.actions.impl.{GrpcAsyncCallAction, GrpcSyncCallAction}
+import tf.benchmark.actions.impl.{TfServingAsyncCallAction, TfServingSyncCallAction}
 import com.thesamet.scalapb.GeneratedMessage
 import io.gatling.core.Predef._
 import tf.benchmark.GrpcCustomCheck
@@ -15,6 +15,8 @@ class TfServingServerSimulation extends Simulation {
 
   val host = "localhost"
   val port = 50051
+  val modelName = "out"
+  val version = 0
 
   val json: String = Source.fromFile("src/test/resources/sample_request.json").getLines.mkString
 
@@ -22,7 +24,7 @@ class TfServingServerSimulation extends Simulation {
 
   val grpcScenario = scenario("Test Tf Serving server")
     .exec(
-      grpcCall(GrpcAsyncCallAction("async", host, port, json)).check(GrpcCustomCheck((s: GeneratedMessage) => {
+      grpcCall(TfServingAsyncCallAction(host, port, modelName,version)).check(GrpcCustomCheck((s: GeneratedMessage) => {
         s.asInstanceOf[LogResponse].message.equals("OK")
       })))
 
