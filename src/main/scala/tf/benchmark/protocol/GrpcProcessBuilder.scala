@@ -1,8 +1,8 @@
 package tf.benchmark.protocol
 
 import io.gatling.core.action.builder.ActionBuilder
-import tf.benchmark.GrpcCheckSupport
 import tf.benchmark.actions.GrpcExecutableAction
+import tf.benchmark.checks.GrpcCheckSupport
 import tf.benchmark.grpc.GrpcCheck
 
 

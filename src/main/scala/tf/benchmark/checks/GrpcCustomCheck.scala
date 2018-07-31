@@ -1,10 +1,9 @@
-package tf.benchmark
+package tf.benchmark.checks
 
-
-import scalapb.GeneratedMessage
 import io.gatling.commons.validation.{Failure, Validation}
 import io.gatling.core.check.CheckResult
 import io.gatling.core.session.Session
+import scalapb.GeneratedMessage
 import tf.benchmark.grpc.GrpcCheck
 
 import scala.collection.mutable

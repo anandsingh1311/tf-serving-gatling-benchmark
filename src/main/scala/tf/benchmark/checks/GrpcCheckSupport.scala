@@ -1,4 +1,4 @@
-package tf.benchmark
+package tf.benchmark.checks
 
 trait GrpcCheckSupport {
 

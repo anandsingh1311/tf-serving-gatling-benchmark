@@ -1,13 +1,16 @@
 package tf.benchmark
 
 
-import scalapb.GeneratedMessage
+import java.io.{File, FileInputStream}
+
 import io.gatling.core.Predef._
-import tensorflow.serving.predict.PredictResponse
-import tf.benchmark.actions.tf.serving.TfServingAsyncCallAction
+import io.gatling.core.structure.ScenarioBuilder
+import scalapb.GeneratedMessage
+import tensorflow.serving.predict.{PredictRequest, PredictResponse}
+import tf.benchmark.actions.tf_serving.TfServingSyncCallAction
+import tf.benchmark.checks.GrpcCustomCheck
 
 import scala.concurrent.duration._
-import scala.io.Source
 
 class TfServingServerSimulation extends Simulation {
 
@@ -15,19 +18,32 @@ class TfServingServerSimulation extends Simulation {
 
   val host = "localhost"
   val port = 9000
-  val modelName = "out"
-  val version = Option(0L)
 
-  val json: String = Source.fromFile("src/test/resources/sample_request.json").getLines.mkString
+  private val predictRequests: Stream[PredictRequest] =
+    PredictRequest.streamFromDelimitedInput(
+      new FileInputStream(new File("src/test/resources/requests.pb"))
+    )
+
+  // TODO: convert this to feed
+
+  //  private val requestFeed: Array[Map[String, Object]] =
+  //    predictRequests
+  //      .map(
+  //        _preReq => Map("modelSpec" -> _preReq.modelSpec, "inputs" -> _preReq.inputs)
+  //      ).toArray
 
   val grpcConfig = grpc()
 
-  val grpcScenario = scenario("Test Tf Serving server")
-    .exec(
-      grpcCall(new TfServingAsyncCallAction(host, port, modelName, version))
-        .check(GrpcCustomCheck((s: GeneratedMessage) => {
-          s.asInstanceOf[PredictResponse].outputs.equals("OK")
-        })))
+  val grpcScenario: ScenarioBuilder =
+    scenario("Tensorflow Serving Server via Sync Stub Call")
+      //.feed(requestFeed)
+      .exec(
+      grpcCall(
+        TfServingSyncCallAction("async", host, port, predictRequests.head.modelSpec, predictRequests.head.inputs)
+      ).check(
+        GrpcCustomCheck((s: GeneratedMessage) => s.asInstanceOf[PredictResponse].outputs.nonEmpty)
+      )
+    )
 
   setUp(
     grpcScenario.inject(

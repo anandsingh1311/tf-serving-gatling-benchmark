@@ -11,6 +11,7 @@ import tf.benchmark.grpc.GrpcCheck
   * Action that will create ActionActor and pass action class that will be triggered during simulation
   */
 object GrpcAction extends NameGen {
+
   /**
     * @param action      - that which execSync or execAsync method will be called during the test (see GrpcActionActor)
     * @param checks      - what kind of result validations will be executed
@@ -26,8 +27,8 @@ object GrpcAction extends NameGen {
             system: ActorSystem,
             statsEngine: StatsEngine,
             next: Action): ExitableActorDelegatingAction = {
-    val actor = system.actorOf(GrpcActionActor.props(action, checks, protocol, statsEngine, next))
-    new ExitableActorDelegatingAction(genName("TfServingGrpc"), statsEngine, next, actor)
+    val grpcActor = system.actorOf(GrpcActionActor.props(action, checks, protocol, statsEngine, next))
+    new ExitableActorDelegatingAction(genName("TfServingGrpc"), statsEngine, next, grpcActor)
   }
 }
 
