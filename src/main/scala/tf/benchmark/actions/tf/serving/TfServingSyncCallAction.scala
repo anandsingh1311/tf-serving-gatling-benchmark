@@ -1,5 +1,4 @@
-package tf.benchmark.actions.impl
-
+package tf.benchmark.actions.tf.serving
 
 import io.grpc.ManagedChannelBuilder
 import tf.benchmark.actions.GrpcExecutableSyncAction

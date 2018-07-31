@@ -1,11 +1,11 @@
-package tf.benchmark
+package tf.benchmark.protocol
 
 import io.gatling.core.action.Action
 import io.gatling.core.action.builder.ActionBuilder
 import io.gatling.core.protocol.Protocols
 import io.gatling.core.structure.ScenarioContext
 import tf.benchmark.actions.{GrpcAction, GrpcExecutableAction}
-import tf.benchmark.grpc._
+import tf.benchmark.grpc.GrpcCheck
 
 /**
   * Responsible to create specific action. Note in our case it uses functionName as criteria to decide if action will

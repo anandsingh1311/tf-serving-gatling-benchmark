@@ -1,15 +1,11 @@
 package tf.benchmark
 
 import io.gatling.core.action.builder.ActionBuilder
+import tf.benchmark.protocol.{GrpcProcessBuilder, GrpcProtocol, GrpcProtocolBuilder}
 
-object Predef extends GrpcDsl
+object Predef extends GrpcCheckSupport {
 
-/**
-  * Implicits for protocol and action builder
-  */
-trait GrpcDsl extends GrpcCheckSupport {
-
-  val GRPC: GrpcProtocolBuilder.type = GrpcProtocolBuilder
+  val grpc: GrpcProtocolBuilder.type = GrpcProtocolBuilder
 
   def grpcCall: GrpcProcessBuilder.type = GrpcProcessBuilder
 
@@ -18,4 +14,3 @@ trait GrpcDsl extends GrpcCheckSupport {
   implicit def grpcProcessBuilder2ActionBuilder(builder: GrpcProcessBuilder): ActionBuilder = builder.build()
 
 }
-

@@ -1,38 +1,33 @@
 package tf.benchmark
 
 
-import tf.benchmark.actions.impl.{TfServingAsyncCallAction, TfServingSyncCallAction}
-
+import scalapb.GeneratedMessage
 import io.gatling.core.Predef._
-import tf.benchmark.GrpcCustomCheck
-
-import tf.benchmark.GrpcCustomCheck
-import tf.benchmark.actions.impl.{GrpcAsyncCallAction, GrpcSyncCallAction}
-import com.trueaccord.scalapb.GeneratedMessage
-import io.gatling.core.Predef._
-import scala.concurrent.duration._
+import tensorflow.serving.predict.PredictResponse
+import tf.benchmark.actions.tf.serving.TfServingAsyncCallAction
 
 import scala.concurrent.duration._
 import scala.io.Source
 
 class TfServingServerSimulation extends Simulation {
 
-  import tf.benchmark.Predef._
+  import Predef._
 
   val host = "localhost"
-  val port = 50051
+  val port = 9000
   val modelName = "out"
-  val version = 0
+  val version = Option(0L)
 
   val json: String = Source.fromFile("src/test/resources/sample_request.json").getLines.mkString
 
-  val grpcConfig = GRPC()
+  val grpcConfig = grpc()
 
   val grpcScenario = scenario("Test Tf Serving server")
     .exec(
-      grpcCall(TfServingAsyncCallAction(host, port, modelName,version)).check(GrpcCustomCheck((s: GeneratedMessage) => {
-        s.asInstanceOf[LogResponse].message.equals("OK")
-      })))
+      grpcCall(new TfServingAsyncCallAction(host, port, modelName, version))
+        .check(GrpcCustomCheck((s: GeneratedMessage) => {
+          s.asInstanceOf[PredictResponse].outputs.equals("OK")
+        })))
 
   setUp(
     grpcScenario.inject(

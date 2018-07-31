@@ -3,14 +3,14 @@ package tf.benchmark.actions
 import akka.actor.Props
 import scalapb.GeneratedMessage
 import io.gatling.commons.stats.{KO, OK}
-import io.gatling.commons.util.TimeHelper
+import io.gatling.commons.util.ClockSingleton
 import io.gatling.commons.validation.Failure
 import io.gatling.core.action.{Action, ActionActor}
 import io.gatling.core.check.Check
 import io.gatling.core.session.Session
 import io.gatling.core.stats.StatsEngine
 import io.gatling.core.stats.message.ResponseTimings
-import tf.benchmark.GrpcProtocol
+import tf.benchmark.protocol.GrpcProtocol
 import tf.benchmark.grpc.GrpcCheck
 
 import scala.concurrent.Future
@@ -20,7 +20,12 @@ import scala.concurrent.Future
   */
 object GrpcActionActor {
 
-  def props(action: GrpcExecutableAction, checks: List[GrpcCheck], protocol: GrpcProtocol, statsEngine: StatsEngine, next: Action): Props = {
+  def props(action: GrpcExecutableAction,
+            checks: List[GrpcCheck],
+            protocol: GrpcProtocol,
+            statsEngine: StatsEngine,
+            next: Action): Props = {
+
     Props(new GrpcActionActor(action, checks, protocol, statsEngine, next))
   }
 
@@ -33,7 +38,8 @@ class GrpcActionActor(action: GrpcExecutableAction,
                       val next: Action) extends ActionActor {
 
   override def execute(session: Session): Unit = {
-    val startTime = TimeHelper.nowMillis
+
+    val startTime = ClockSingleton.nowMillis
     var optionalResult: Option[GeneratedMessage] = None
     var optionalThrowable: Option[Throwable] = None
 
@@ -65,7 +71,7 @@ class GrpcActionActor(action: GrpcExecutableAction,
       * @param error       - error in case it exists
       */
     def logResult(maybeResult: Option[GeneratedMessage], error: Option[Throwable] = None): Unit = {
-      val endTime = TimeHelper.nowMillis
+      val endTime = ClockSingleton.nowMillis
       val timings = ResponseTimings(startTime, endTime)
 
       if (error.isEmpty) {

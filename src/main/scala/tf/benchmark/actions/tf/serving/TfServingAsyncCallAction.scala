@@ -1,12 +1,12 @@
-package tf.benchmark.actions.impl
+package tf.benchmark.actions.tf.serving
 
 import tf.benchmark.actions.GrpcExecutableAsyncAction
 import tensorflow.serving.prediction_service.PredictionServiceGrpc
 import tensorflow.serving.prediction_service.PredictionServiceGrpc.PredictionServiceStub
 import tensorflow.serving.predict._
-import com.trueaccord.scalapb.GeneratedMessage
+import scalapb.GeneratedMessage
 import tensorflow.serving.model.ModelSpec
-import io.grpc.ManagedChannelBuilder
+import io.grpc.{ManagedChannel, ManagedChannelBuilder}
 
 import scala.concurrent.Future
 
@@ -24,14 +24,15 @@ object TfServingAsyncCallAction {
     * @param version   - model version deployed
     * @return - GrpcAsyncCallAction
     */
-  def apply(host: String, port: Int, modelName: String, version: Option[Long]): TfServingAsyncCallAction = new TfServingAsyncCallAction(host, port, modelName, version)
+  def apply(host: String, port: Int, modelName: String, version: Option[Long]): TfServingAsyncCallAction =
+    new TfServingAsyncCallAction(host, port, modelName, version)
 }
 
 class TfServingAsyncCallAction(host: String, port: Int, modelName: String, version: Option[Long]) extends GrpcExecutableAsyncAction {
 
-  var channel = ManagedChannelBuilder.forAddress(host, port).usePlaintext(true).build
+  var channel: ManagedChannel = ManagedChannelBuilder.forAddress(host, port).usePlaintext(true).build
   val asyncCall: PredictionServiceStub = PredictionServiceGrpc.stub(channel)
-  val modelSpec: Option[ModelSpec] = Option(new ModelSpec(modelName, version))
+  val modelSpec: Option[ModelSpec] = Option(ModelSpec(modelName, version))
 
   /**
     * Send async call to the server
